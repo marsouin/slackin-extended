@@ -4,6 +4,7 @@ var body = document.body
 var request = superagent
 
 // elements
+var channels = new Array();
 var form = body.querySelector('form#invite')
 var channel = form.elements['channel'] || {}
 var email = form.elements['email']
@@ -28,7 +29,15 @@ function submitForm (ev){
     return grecaptcha.execute();
   }
 
-  invite(channel ? channel.value : null, coc && coc.checked ? 1 : 0, email.value, gcaptcha_token, function (err, msg){
+  for (var i=0, n=channel.length;i<n;i++) 
+  {
+      if (channel[i].checked) 
+      {
+          channels.push(channel[i].value);
+      }
+  }
+
+  invite(channels, coc && coc.checked ? 1 : 0, email.value, gcaptcha_token, function (err, msg){
     if (err) {
       button.removeAttribute('disabled')
       button.classList.add('error')
